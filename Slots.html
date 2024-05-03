@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js Calculator with Slots</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>Калькулятор</h2>
+    <input type="number" v-model="num1" placeholder="Введите число">
+    <input type="number" v-model="num2" placeholder="Введите число">
+    <button @click="add">Сложить</button>
+    <button @click="subtract">Вычесть</button>
+    <button @click="multiply">Умножить</button>
+    <button @click="divide">Разделить</button>
+    <calculator-result :result="result">
+      <template v-slot:default="slotProps">
+        <div>Результат: {{ slotProps.result }}</div>
+      </template>
+    </calculator-result>
+  </div>
+
+  <script>
+    Vue.component('calculator-result', {
+      props: ['result'],
+      template: `
+        <div>
+          <slot :result="result"></slot>
+        </div>
+      `
+    });
+
+    new Vue({
+      el: '#app',
+      data: {
+        num1: 0,
+        num2: 0,
+        result: 0
+      },
+      methods: {
+        add() {
+          this.result = +this.num1 + +this.num2;
+        },
+        subtract() {
+          this.result = +this.num1 - +this.num2;
+        },
+        multiply() {
+          this.result = +this.num1 * +this.num2;
+        },
+        divide() {
+          if (this.num2 !== 0) {
+            this.result = +this.num1 / +this.num2;
+          } else {
+            alert("На ноль делить нельзя!");
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
